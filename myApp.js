@@ -13,7 +13,7 @@ const personSchema = new Schema({
 //Create model from personSchema
 let Person = mongoose.model('Person', personSchema);
 
-//Create and save person function
+//Create and save a new document
 const createAndSavePerson = (done) => {
   let person = new Person({ name: "Jhon", age: 30, favoriteFoods: ["Apple", "Watermelon", "Orange"] });
 
@@ -25,6 +25,7 @@ const createAndSavePerson = (done) => {
 
 };
 
+// Creating a schema with many peoples
 const createManyPeople = (arrayOfPeople, done) => {
   // arrayOfPeople = [
   //   { name: "Jhon", age: 30, favoriteFoods: ["Apple", "Watermelon", "Orange"]},
@@ -38,6 +39,7 @@ const createManyPeople = (arrayOfPeople, done) => {
 
 };
 
+// Find a document by name
 const findPeopleByName = (personName, done) => {
   Person.find({ name: personName }, function(err, data) {
     if (err) return console.log(err);
@@ -45,6 +47,7 @@ const findPeopleByName = (personName, done) => {
   });
 };
 
+// Find document by specific parameter in this case, food.
 const findOneByFood = (food, done) => {
   Person.findOne({ favoriteFoods: food }, function(err, data) {
     if (err) return console.log(err);
@@ -52,6 +55,7 @@ const findOneByFood = (food, done) => {
   });
 };
 
+// Find a document by ID
 const findPersonById = (personId, done) => {
   Person.findById({ _id: personId }, function(err, data) {
     if (err) return console.log(err);
@@ -59,6 +63,7 @@ const findPersonById = (personId, done) => {
   });
 };
 
+// Find a document edit then save
 const findEditThenSave = (personId, done) => {
   const foodToAdd = "hamburger";
   Person.findById({ _id: personId }, function(err, data) {
@@ -72,6 +77,7 @@ const findEditThenSave = (personId, done) => {
 
 };
 
+// Find a document then update
 const findAndUpdate = (personName, done) => {
   const ageToSet = 20;
   Person.findOneAndUpdate({ name: personName }, { age: ageToSet }, { new: true },
@@ -81,6 +87,7 @@ const findAndUpdate = (personName, done) => {
     });
 };
 
+// Remove a document by ID
 const removeById = (personId, done) => {
   Person.findByIdAndRemove({_id:personId}, function(err, data){
     if(err) return console.log(err);
@@ -88,6 +95,7 @@ const removeById = (personId, done) => {
   });
 };
 
+// Remove many documents 
 const removeManyPeople = (done) => {
   const nameToRemove = "Mary";
   Person.remove({name:nameToRemove}, function(err, data){
@@ -97,13 +105,14 @@ const removeManyPeople = (done) => {
 
 };
 
+// Query a document in chain
 const queryChain = (done) => {
   const foodToSearch = "burrito";
   Person.find({favoriteFoods:foodToSearch})
-  .sort({name: "asc"})
-  .limit(2)
-  .select({name:1,favoriteFoods: 1})
-  .exec(function(err, data){
+  .sort({name: "asc"})// Sort name in ascendent order
+  .limit(2)// Limit query to two results
+  .select({name:1,favoriteFoods: 1}) // From query include only name and favriteFoods
+  .exec(function(err, data){// Execute callback function
     if(err)return console.log(err);
     done(null , data);
 
